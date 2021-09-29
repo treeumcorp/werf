@@ -1,5 +1,11 @@
 Убедитесь, что Git версии 2.18.0 или новее и [Docker](https://docs.docker.com/get-docker) установлены.
 
+f
+sd
+fsd
+fsd
+f
+
 Чтобы обычный пользователь мог запустить `werf`, пользователь должен иметь доступ к Docker-сервису:
 ```shell
 sudo groupadd docker
