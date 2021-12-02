@@ -18,12 +18,7 @@ docker run --rm --privileged -v $HOME/.werf:/root/.werf -v /tmp:/tmp -v /var/run
 ```
 
 Build your own docker image with werf for this method.
----
-title: Run werf in Github Actions with docker runner
-permalink: advanced/ci_cd/werf_in_container/use_docker_for_github_actions.html
----
 
-This page is under construction.
 ### Remote docker server
 
 This method supports only building of dockerfile-images. Stapel-images is not supported, because stapel images builder use mounts from host system into docker images.
