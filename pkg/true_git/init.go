@@ -1,6 +1,7 @@
 package true_git
 
 import (
+	"bufio"
 	"bytes"
 	"errors"
 	"fmt"
@@ -77,19 +78,28 @@ func getGitCliVersion() (string, error) {
 		return "", errors.New(errMsg)
 	}
 
-	strippedOut := strings.TrimSpace(out.String())
-	rightPart := strings.TrimPrefix(strippedOut, "git version ")
-	fullVersion := strings.Split(rightPart, " ")[0]
-	fullVersionParts := strings.Split(fullVersion, ".")
+	rawOutput := out.String()
+	scanner := bufio.NewScanner(strings.NewReader(rawOutput))
 
-	lowestVersionPartInd := 3
-	if len(fullVersionParts) < lowestVersionPartInd {
-		lowestVersionPartInd = len(fullVersionParts)
+	for scanner.Scan() {
+		line := strings.TrimSpace(scanner.Text())
+		if strings.HasPrefix(line, "git version ") {
+			rightPart := strings.TrimPrefix(line, "git version ")
+			fullVersion := strings.Split(rightPart, " ")[0]
+			fullVersionParts := strings.Split(fullVersion, ".")
+
+			lowestVersionPartInd := 3
+			if len(fullVersionParts) < lowestVersionPartInd {
+				lowestVersionPartInd = len(fullVersionParts)
+			}
+
+			version := strings.Join(fullVersionParts[0:lowestVersionPartInd], ".")
+
+			return version, nil
+		}
 	}
 
-	version := strings.Join(fullVersionParts[0:lowestVersionPartInd], ".")
-
-	return version, nil
+	return "", fmt.Errorf("unexpected 'git version' output:\n%s", strings.TrimSpace(rawOutput))
 }
 
 func checkVersionConstraints() error {
