@@ -682,6 +682,8 @@ func (gm *GitMapping) StageDependenciesChecksum(ctx context.Context, c Conveyor,
 			return "", err
 		}
 
+		fmt.Printf("-- GitMapping.StageDependenciesChecksum checksum for path %s -> %s\n", p, checksum)
+
 		if checksum == "" {
 			absDepPath := path.Join(gm.Add, p)
 			logboek.Context(ctx).Warn().LogF(

@@ -2,6 +2,7 @@ package stage
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/werf/werf/pkg/build/builder"
 	"github.com/werf/werf/pkg/config"
@@ -29,6 +30,7 @@ type SetupStage struct {
 }
 
 func (s *SetupStage) GetDependencies(ctx context.Context, c Conveyor, _, _ container_runtime.LegacyImageInterface) (string, error) {
+	fmt.Printf("-- SetupStage.GetDependencies\n")
 	stageDependenciesChecksum, err := s.getStageDependenciesChecksum(ctx, c, Setup)
 	if err != nil {
 		return "", err

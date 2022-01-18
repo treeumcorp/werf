@@ -167,6 +167,8 @@ func (s *BaseStage) selectStagesAncestorsByGitMappings(ctx context.Context, c Co
 			return nil, fmt.Errorf("error getting latest commit of git mapping %s: %s", gitMapping.Name, err)
 		}
 
+		fmt.Printf("-- BaseStage.selectStagesAncestorsByGitMappings GetLatestCommitInfo -> %#v\n", currentCommitInfo)
+
 		var currentCommit string
 		if currentCommitInfo.VirtualMerge {
 			currentCommit = currentCommitInfo.VirtualMergeFromCommit

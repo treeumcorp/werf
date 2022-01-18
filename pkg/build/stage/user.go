@@ -2,6 +2,7 @@ package stage
 
 import (
 	"context"
+	"fmt"
 	"os"
 
 	"github.com/werf/logboek"
@@ -38,10 +39,12 @@ type UserStage struct {
 func (s *UserStage) getStageDependenciesChecksum(ctx context.Context, c Conveyor, name StageName) (string, error) {
 	var args []string
 	for _, gitMapping := range s.gitMappings {
+		fmt.Printf("-- UserStage.getStageDependenciesChecksum StageDependenciesChecksum ...\n")
 		checksum, err := gitMapping.StageDependenciesChecksum(ctx, c, name)
 		if err != nil {
 			return "", err
 		}
+		fmt.Printf("-- UserStage.getStageDependenciesChecksum StageDependenciesChecksum -> %v\n", checksum)
 
 		if debugUserStageChecksum() {
 			logboek.Context(ctx).Debug().LogFHighlight(
