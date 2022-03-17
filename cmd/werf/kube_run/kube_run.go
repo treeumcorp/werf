@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"math/rand"
 	"os"
+	"os/exec"
 	"strings"
 
 	"github.com/docker/cli/cli"
@@ -32,7 +33,6 @@ import (
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/fields"
 	"k8s.io/apimachinery/pkg/util/validation"
-	"k8s.io/kubectl/pkg/cmd"
 )
 
 type cmdDataType struct {
@@ -405,6 +405,7 @@ func run(ctx context.Context, pod string, namespace string, werfConfig *config.W
 	}
 
 	args := []string{
+		"kubectl",
 		"run",
 		"--namespace", namespace,
 		pod,
@@ -442,13 +443,17 @@ func run(ctx context.Context, pod string, namespace string, werfConfig *config.W
 
 	return logboek.Streams().DoErrorWithoutProxyStreamDataFormatting(func() error {
 		return common.WithoutTerminationSignalsTrap(func() error {
-			kubectlCmd := cmd.NewDefaultKubectlCommandWithArgs(nil, nil, os.Stdin, os.Stdout, os.Stderr)
-			kubectlCmd.SetArgs(args)
-			kubectlCmd.SilenceUsage = true
 			logboek.Context(ctx).LogF("Running pod %q in namespace %q ...\n", pod, namespace)
-			if err := kubectlCmd.Execute(); err != nil {
-				fmt.Errorf("error running pod: %w", err)
+
+			cmd := exec.Command(os.Args[0], args...)
+			cmd.Stdout = os.Stdout
+			cmd.Stderr = os.Stderr
+			cmd.Stdin = os.Stdin
+
+			if err := cmd.Run(); err != nil {
+				return fmt.Errorf("error running pod: %w", err)
 			}
+
 			return nil
 		})
 	})
