@@ -411,9 +411,8 @@ func run(ctx context.Context, pod string, namespace string, werfConfig *config.W
 		"--image", image,
 		"--command",
 		"--restart", "Never",
-		// FIXME(ilya-lesikov):
-		// "--quiet",
-		// "--attach",
+		"--quiet",
+		"--attach",
 	}
 
 	if cmdData.Interactive {
