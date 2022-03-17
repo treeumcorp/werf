@@ -8,6 +8,7 @@ import (
 
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"
+	"github.com/werf/werf/cmd/werf/kube_run"
 
 	"github.com/werf/logboek"
 	"github.com/werf/werf/cmd/werf/build"
@@ -110,6 +111,7 @@ Find more information at https://werf.io`),
 				build.NewCmd(),
 				export.NewExportCmd(),
 				run.NewCmd(),
+				kube_run.NewCmd(),
 				dockerComposeCmd(),
 				slugify.NewCmd(),
 				render.NewCmd(),
